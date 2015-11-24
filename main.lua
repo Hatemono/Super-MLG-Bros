@@ -19,6 +19,8 @@ function love.load(arg)
 	--player.img = love.graphics.newImage("/Gfx/mlgario.png")
 	bulletImg = love.graphics.newImage("/Gfx/bullet2.png")
   bulletImgL = love.graphics.newImage("/Gfx/bullet2L.png")
+  cross = love.graphics.newImage("/Gfx/Crosshair.png") --celownik jak cos
+  love.mouse.setVisible(false) -- a to do wywalania kuhsoha
   run = love.graphics.newImage("/Gfx/Marian1.png")
   run2 = love.graphics.newImage("/Gfx/Marian2.png")
   run3 = love.graphics.newImage("/Gfx/Marian3.png")
@@ -126,6 +128,8 @@ function love.update(dt)
 end
 
 function love.draw(dt)
+  local myszx, myszy = love.mouse.getPosition()
+  love.graphics.draw(cross, myszx-60, myszy-60)
  	love.graphics.print("FPS:"..tostring(love.timer.getFPS()),10,10)
 	love.graphics.draw(player.img, player.x, player.y)
   love.graphics.print(table.maxn(bulletsL)..'-'..table.maxn(bullets),10,80)
