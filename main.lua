@@ -1,10 +1,12 @@
 debug = true
+BulletSpeed = 1000
 player = { x = 200, y = 200, speed = 150, img = nil }
 canShoot = true
 canShootTimerMax = 0.2
 canShootTimer = canShootTimerMax
 bulletImg = nil
 bullets = {}
+bulletsL = {}
 walkTimer = 0.1
 walk = true
 wok = true
@@ -16,6 +18,7 @@ function love.load(arg)
 	wow = love.audio.newSource("/Audio/wow.mp3","static")
 	--player.img = love.graphics.newImage("/Gfx/mlgario.png")
 	bulletImg = love.graphics.newImage("/Gfx/bullet2.png")
+  bulletImgL = love.graphics.newImage("/Gfx/bullet2L.png")
   run = love.graphics.newImage("/Gfx/Marian1.png")
   run2 = love.graphics.newImage("/Gfx/Marian2.png")
   run3 = love.graphics.newImage("/Gfx/Marian3.png")
@@ -27,6 +30,7 @@ function love.load(arg)
   jumpL = love.graphics.newImage("/Gfx/jumpL.png")
   stopL = love.graphics.newImage("/Gfx/marian_stopL.png")
   snajpa = love.graphics.newImage("/Gfx/snajpa.png")
+  snajpaL = love.graphics.newImage("/Gfx/snajpaL.png")
   player.img = run
 end
 
@@ -77,9 +81,15 @@ function love.update(dt)
 	end
   
   if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShoot then
-    newBullet = { x = player.x + 150, y = player.y+35, img = bulletImg }
-    table.insert(bullets, newBullet)
-    if(player.x > 4) then player.x = player.x-5 end
+    if isLeft then
+      newBullet = { x = player.x - 98, y = player.y+35, img = bulletImgL }
+      table.insert(bulletsL, newBullet)
+      if(player.x < love.graphics.getWidth()) then player.x = player.x+5 end
+    else  
+      newBullet = { x = player.x + 150, y = player.y+35, img = bulletImg }
+      table.insert(bullets, newBullet)
+      if(player.x > 4) then player.x = player.x-5 end
+    end
     canShoot = false
     canShootTimer = canShootTimerMax
 	end
@@ -99,9 +109,15 @@ function love.update(dt)
 	end
 	
   for i, bullet in ipairs(bullets) do
-    bullet.x = bullet.x + (500 * dt)
-		if bullet.x < 0 then
+    bullet.x = bullet.x + (BulletSpeed * dt)
+		if bullet.x > love.graphics.getWidth() then
 			table.remove(bullets, i)
+		end
+	end
+  for i, bullet in ipairs(bulletsL) do
+    bullet.x = bullet.x - (BulletSpeed * dt)
+		if bullet.x < 0 then
+			table.remove(bulletsL, i)
 		end
 	end
   
@@ -110,11 +126,18 @@ end
 function love.draw(dt)
  	love.graphics.print("FPS:"..tostring(love.timer.getFPS()),10,10)
 	love.graphics.draw(player.img, player.x, player.y)
- 	love.graphics.draw(snajpa, player.x-13, player.y+20)
+  love.graphics.print(table.maxn(bulletsL)..'-'..table.maxn(bullets),10,80)
+ 	if isLeft then love.graphics.draw(snajpaL, player.x-90, player.y+20)
+  else love.graphics.draw(snajpa, player.x-13, player.y+20) end
  
 	for i, bullet in ipairs(bullets) do
     love.graphics.draw(bullet.img, bullet.x, bullet.y)
 	end
+  
+  for i, bullet in ipairs(bulletsL) do
+    love.graphics.draw(bullet.img, bullet.x, bullet.y)
+	end
+  
   love.graphics.print(tostring(walk1),60,10)
 end
 
