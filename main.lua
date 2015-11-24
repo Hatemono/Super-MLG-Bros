@@ -129,7 +129,7 @@ end
 
 function love.draw(dt)
   local myszx, myszy = love.mouse.getPosition()
-  love.graphics.draw(cross, myszx-60, myszy-60)
+  love.graphics.draw(cross, myszx-60, myszy-45)
  	love.graphics.print("FPS:"..tostring(love.timer.getFPS()),10,10)
 	love.graphics.draw(player.img, player.x, player.y)
   love.graphics.print(table.maxn(bulletsL)..'-'..table.maxn(bullets),10,80)
@@ -141,7 +141,7 @@ function love.draw(dt)
 	end
   
   for i, bullet in ipairs(bulletsL) do
-    love.graphics.draw(bullet.img, bullet.x, bullet.y)
+    love.graphics.draw(bullet.img, bullet.x, bullet.y,gundirection)
 	end
   
   love.graphics.print(tostring(walk1),60,10)
