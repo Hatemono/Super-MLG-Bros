@@ -116,7 +116,7 @@ function love.update(dt)
 	end
   for i, bullet in ipairs(bulletsL) do
     bullet.x = bullet.x - (BulletSpeed * dt)
-		if bullet.x < 0 then
+		if bullet.x < 0 - bulletImg:getWidth() then
 			table.remove(bulletsL, i)
 		end
 	end
