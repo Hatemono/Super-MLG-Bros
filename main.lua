@@ -5,13 +5,19 @@ canShoot = true
 canShootTimerMax = 0.2
 canShootTimer = canShootTimerMax
 bulletImg = nil
+enemyImg = nil
 bullets = {}
+enemies = {}
 bulletsL = {}
 walkTimer = 0.1
 walk = true
 wok = true
 walk1 = 1
 isLeft = false
+createEnemyTimerMax = 0.4
+createEnemyTimer = createEnemyTimerMax
+PlayerAlive = true
+score = 0
 
 function love.load(arg)
 	hit = love.audio.newSource("Audio/HITMARKER.mp3","static")
@@ -19,6 +25,7 @@ function love.load(arg)
 	--player.img = love.graphics.newImage("/Gfx/mlgario.png")
 	bulletImg = love.graphics.newImage("/Gfx/bullet2.png")
   bulletImgL = love.graphics.newImage("/Gfx/bullet2L.png")
+  enemyImg = love.graphics.newImage("/Gfx/mlgario.png")
   cross = love.graphics.newImage("/Gfx/Crosshair.png") --celownik jak cos
   love.mouse.setVisible(false) -- a to do wywalania kuhsoha
   run = love.graphics.newImage("/Gfx/Marian1.png")
@@ -44,6 +51,23 @@ function love.update(dt)
     else player.img = stop end
   end
 	
+  for i, enemy in ipairs(enemies) do
+    for j, bullet in ipairs(bullets) do
+      if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight  ()) then
+			table.remove(bullets, j)
+			table.remove(enemies, i)
+			score = score + 1
+		end
+	end
+
+	if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(), player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
+	and isAlive then
+		table.remove(enemies, i)
+		isAlive = false
+	end
+end
+  
+  
   if love.keyboard.isDown("left","a") then
 		if player.x > 0 then
 			player.x = player.x - (player.speed*dt)
@@ -125,17 +149,32 @@ function love.update(dt)
 		end
 	end
   
+  createEnemyTimer = createEnemyTimer - (1 * dt)
+    if createEnemyTimer < 0 then
+      createEnemyTimer = createEnemyTimerMax
+    randomNumber = math.random(10, love.graphics.getWidth() - 10)
+    newEnemy = { y = randomNumber, x = 640, img = enemyImg }
+    table.insert(enemies, newEnemy)
+  end
+  
+  for i, enemy in ipairs(enemies) do
+    enemy.x = enemy.x - (200 * dt)
+    if enemy.x < 0 then 
+      table.remove(enemies, i)
+    end
+  end
+  
 end
 
 function love.draw(dt)
   local myszx, myszy = love.mouse.getPosition()
   love.graphics.draw(cross, myszx-60, myszy-45)
  	love.graphics.print("FPS:"..tostring(love.timer.getFPS()),10,10)
+  love.graphics.print("Wynik:"..tostring(score),50,50)
 	love.graphics.draw(player.img, player.x, player.y)
   love.graphics.print(table.maxn(bulletsL)..'-'..table.maxn(bullets),10,80)
  	if isLeft then love.graphics.draw(snajpaL, player.x-90, player.y+20)
   else love.graphics.draw(snajpa, player.x-13, player.y+20,gundirection) end
- 
 	for i, bullet in ipairs(bullets) do
     love.graphics.draw(bullet.img, bullet.x, bullet.y,gundirection)
 	end
@@ -143,6 +182,10 @@ function love.draw(dt)
   for i, bullet in ipairs(bulletsL) do
     love.graphics.draw(bullet.img, bullet.x, bullet.y,gundirection)
 	end
+  
+  for i, enemy in ipairs(enemies) do
+    love.graphics.draw(enemy.img, enemy.x, enemy.y)
+  end
   
   love.graphics.print(tostring(walk1),60,10)
 end
@@ -155,4 +198,11 @@ end
 
 function findRotation(x1,y1,x2,y2) --do celowania ;p
    return math.atan2(y2 - y1, x2 - x1)
+end
+
+function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
+  return x1 < x2+w2 and
+         x2 < x1+w1 and
+         y1 < y2+h2 and
+         y2 < y1+h1
 end
