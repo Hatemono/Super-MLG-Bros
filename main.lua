@@ -38,7 +38,7 @@ end
 
 function love.update(dt)
 	if love.keyboard.isDown("escape") then love.event.push("quit") end
-  
+  gundirection = findRotation(player.x-13, player.y+20,love.mouse.getX(),love.mouse.getY())
   if not love.keyboard.isDown("left", "right", "a", "d") then
     if isLeft then player.img = stopL
     else player.img = stop end
@@ -134,10 +134,10 @@ function love.draw(dt)
 	love.graphics.draw(player.img, player.x, player.y)
   love.graphics.print(table.maxn(bulletsL)..'-'..table.maxn(bullets),10,80)
  	if isLeft then love.graphics.draw(snajpaL, player.x-90, player.y+20)
-  else love.graphics.draw(snajpa, player.x-13, player.y+20) end
+  else love.graphics.draw(snajpa, player.x-13, player.y+20,gundirection) end
  
 	for i, bullet in ipairs(bullets) do
-    love.graphics.draw(bullet.img, bullet.x, bullet.y)
+    love.graphics.draw(bullet.img, bullet.x, bullet.y,gundirection)
 	end
   
   for i, bullet in ipairs(bulletsL) do
@@ -151,4 +151,8 @@ function love.keypressed(key)
 	if key == "a" then hit:play() 
   else hit:play() end
 	if key == "w" then wow:play() end
+end
+
+function findRotation(x1,y1,x2,y2) --do celowania ;p
+   return math.atan2(y2 - y1, x2 - x1)
 end
