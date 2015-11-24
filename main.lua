@@ -84,7 +84,9 @@ function love.update(dt)
     if isLeft then
       newBullet = { x = player.x - 98, y = player.y+35, img = bulletImgL }
       table.insert(bulletsL, newBullet)
-      if(player.x < love.graphics.getWidth()) then player.x = player.x+5 end
+      if player.x < love.graphics.getWidth() - player.img:getWidth() then
+        player.x = player.x+5 
+      end
     else  
       newBullet = { x = player.x + 150, y = player.y+35, img = bulletImg }
       table.insert(bullets, newBullet)
