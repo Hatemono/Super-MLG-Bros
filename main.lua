@@ -146,8 +146,8 @@ end
       Iks = Objects.player.body:getX() - 20 + math.cos(gundirection)*100
       Igrek = Objects.player.body:getY() + math.sin(gundirection)*100
       newBullet.body = love.physics.newBody(world, Iks, Igrek, "dynamic") 
-      love.graphics.rotate(gundirection)
       newBullet.shape = love.physics.newRectangleShape(24,6)
+      newBullet.body:setAngle(gundirection);
       newBullet.fixture = love.physics.newFixture(newBullet.body, newBullet.shape, 1)
       newBullet.fixture:setRestitution(0.9)
       newBullet.body:setLinearVelocity(math.cos(gundirection)*300, math.sin(gundirection)*300)
@@ -161,8 +161,8 @@ end
       Iks = Objects.player.body:getX() + math.cos(gundirection)*100
       Igrek = Objects.player.body:getY() + math.sin(gundirection)*100
       newBullet.body = love.physics.newBody(world, Iks, Igrek, "dynamic") 
-      love.graphics.rotate(gundirection)
       newBullet.shape = love.physics.newRectangleShape(24,6)
+      newBullet.body:setAngle(gundirection);
       newBullet.fixture = love.physics.newFixture(newBullet.body, newBullet.shape, 1)
       newBullet.fixture:setRestitution(0.9)
       newBullet.body:setLinearVelocity(math.cos(gundirection)*300, math.sin(gundirection)*300)
