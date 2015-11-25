@@ -18,7 +18,7 @@ createEnemyTimer = createEnemyTimerMax
 PlayerAlive = true
 score = 0
 --PhysX--
-FizykaLol = false   --Ustaw na true i umrzyj--
+FizykaLol = true   --Ustaw na true i umrzyj--
 Objects = {player = { x = 200, y = 200, speed = 150, img = nil } , podloga = {}}
 --PhysX--
 
@@ -37,10 +37,9 @@ function love.load(arg)
   --PhysX--
 	hit = love.audio.newSource("Audio/HITMARKER.mp3","static")
 	wow = love.audio.newSource("/Audio/wow.mp3","static")
-	--player.img = love.graphics.newImage("/Gfx/mlgario.png")
 	bulletImg = love.graphics.newImage("/Gfx/bullet2.png")
   bulletImgL = love.graphics.newImage("/Gfx/bullet2L.png")
-  enemyImg = love.graphics.newImage("/Gfx/mlgario.png")
+  enemyImg = love.graphics.newImage("/Gfx/Kriper.png")
   cross = love.graphics.newImage("/Gfx/Crosshair.png") --celownik jak cos
   love.mouse.setVisible(false) -- a to do wywalania kuhsoha
   run = love.graphics.newImage("/Gfx/Marian1.png")
@@ -236,7 +235,7 @@ function love.draw(dt)
 	end
   
   for i, enemy in ipairs(enemies) do
-    love.graphics.draw(enemy.img, enemy.x, enemy.y)
+    love.graphics.draw(enemy.img, enemy.x, enemy.y,0,0.3)
   end
   
   --for i=0, love.graphics.getWidth(), 16 do
